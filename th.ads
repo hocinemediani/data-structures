@@ -38,7 +38,7 @@ package TH is
 
 
     -- Check if a key is in the hash map.
-    function IsIn (Hashmap : in hashMap; NodeArray : in nodeArray; Key : in String) return Boolean;
+    function IsIn (HashMap : in hashMap; NodeArray : in nodeArray; Key : in String) return Boolean;
 
 
     -- Get the value associated to a key with the exception Cle_Absente_Exception.

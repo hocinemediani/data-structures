@@ -74,11 +74,10 @@ package body TH is
     procedure Register (HashMap : in out HashMap; NodeArray : in out nodeArray; Key : in String; Value : in Integer) is
 
     current : entryNodePointer;
-    HashedKey : Integer;
+    hashedKey : Integer := Key'Length mod HashMap.length;
 
     begin
-        HashedKey := Key'Length mod HashMap.length;
-        current := NodeArray (HashedKey);
+        current := NodeArray (hashedKey);
         -- If there is no existing occurence with the said hash key.
         if NodeArray (HashedKey).value = null then
             current.key := Key;
@@ -107,37 +106,76 @@ package body TH is
 
     procedure Delete (HashMap : in out hashMap; NodeArray : in out nodeArray; Key : in String) is
 
-    begin
+    current : entryNodePointer;
+    hashedKey : Integer := Key'Length mod HashMap.length;
 
+    begin
+        current := NodeArray (hashedKey);
+        if current.key = Key then
+            if current.next = null then
+                NodeArray (hashedKey) := null;
+            else
+                NodeArray (hashedKey) := current;
+            end if;
+            Free (current);
+        else
+            current := current.next;
+            while current /= null loop
+                if current.key = Key then
+                    if current.next = null then
+                        NodeArray (hashedKey) := null;
+                    else
+                        NodeArray (hashedKey) := current;
+                    end if;
+                    Free (current);
+                end if;
+            end loop;
+        end if;
+        raise Cle_Absente_Exception;
     end Delete;
 
 
     function IsIn (HashMap : in hashMap; NodeArray : in NodeArray; Key : in String) return Boolean is
     
     current : entryNodePointer;
+    hashedKey : Integer := Key'Length mod HashMap.length;
     
     begin
-        -- Exploring the hash map.
-        for i in 1..HashMap.length loop
-            current := NodeArray (i);
-            -- Exploring the linked lists.
+        current := NodeArray (hashedKey);
+        if current.key = Key then
+            return True;
+        elsif current.next /= null then
+            current := current.next;
             while current /= null loop
                 if current.key = Key then
                     return True;
                 end if;
                 current := current.next;
             end loop;
-        end loop;
+        end if;
         return False;
     end IsIn;
 
 
-    function ValueOf (HashMap : in hashMap; Key : in String) return Integer is
+    function ValueOf (HashMap : in hashMap; NodeArray : in nodeArray; Key : in String) return Integer is
 
-    
+    current : entryNodePointer;
+    hashedKey : Integer := Key'Length mod HashMap.length;
 
     begin
-
+        current := NodeArray (hashedKey);
+        if current.key = Key then
+            return current.value;
+        elsif current.next /= null then
+            current := current.next;
+            while current /= null loop
+                if current.key = Key then
+                    return current.value;
+                end if;
+                current := current.next;
+            end loop;
+        end if;
+        raise Cle_Absente_Exception;
     end ValueOf;
 
 
@@ -146,7 +184,18 @@ package body TH is
     current : entryNodePointer;
         
     begin
-        
+        for i in 1..HashMap.length loop
+            current := NodeArray (i);
+            Put(i);
+            if current.next = null then
+                Put("-->[" + '"' + current.key + '"' + " : " + current.value + "]");
+            elsif current.next /= null then
+                while current /= null loop
+                    Put("-->[" + '"' + current.key + '"' + " : " + current.value + "]");
+                end loop;
+            end if;
+            Put("--E");
+        end loop;
     end Display;
 
 end TH;
