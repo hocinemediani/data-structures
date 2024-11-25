@@ -1,0 +1,152 @@
+% Validation de pr02
+% 2024-11-21 15:47:53.572444
+
+
+################################################################################
+# Modification des fichiers fournis
+################################################################################
+
+
+================================================================================
+## Fichiers qui NE devaient PAS être modifiés
+================================================================================
+
+* Fichier alea.adb non modifié... ok
+* Fichier alea.ads non modifié... ok
+* Fichier exemple_alea.adb non modifié... ok
+* Fichier exemple_unbounded_string.adb non modifié... ok
+* Fichier sda_exceptions.ads non modifié... ok
+* Fichier test_lca.adb non modifié... ERREUR
+
+  | 12c12
+  | < 		new LCA (tKey => Unbounded_String, tValue => Integer);
+  | ---
+  | > 		new LCA (T_Cle => Unbounded_String, T_Valeur => Integer);
+  | 71c71
+  | < 	procedure Construire_Exemple_Sujet (Annuaire : out tLCA; Bavard: Boolean := False) is
+  | ---
+  | > 	procedure Construire_Exemple_Sujet (Annuaire : out T_LCA; Bavard: Boolean := False) is
+  | 104c104
+  | < 		Annuaire : tLCA;
+  | ---
+  | > 		Annuaire : T_LCA;
+  | 113c113
+  | < 		Annuaire : tLCA;
+  | ---
+  | > 		Annuaire : T_LCA;
+  | 142c142
+  | < 		Annuaire : tLCA;
+  | ---
+  | > 		Annuaire : T_LCA;
+  | 173c173
+  | < 			Annuaire : tLCA;
+  | ---
+  | > 			Annuaire : T_LCA;
+  | 206c206
+  | < 			Annuaire : tLCA;
+  | ---
+  | > 			Annuaire : T_LCA;
+  | 242c242
+  | < 		Annuaire : tLCA;
+  | ---
+  | > 		Annuaire : T_LCA;
+  | 261c261
+  | < 		Annuaire : tLCA;
+  | ---
+  | > 		Annuaire : T_LCA;
+  | 282c282
+  | < 		Annuaire : tLCA;
+  | ---
+  | > 		Annuaire : T_LCA;
+  | 311c311
+  | < 		Annuaire : tLCA;
+  | ---
+  | > 		Annuaire : T_LCA;
+  | 344c344
+  | < 		Annuaire : tLCA;
+  | ---
+  | > 		Annuaire : T_LCA;
+
+
+================================================================================
+## Fichiers qui DEVAIENT être modifiés
+================================================================================
+
+* Fichier lca_sujet.adb modifié... ok
+* Fichier lca.ads modifié... ok
+* Fichier lca.adb modifié... ok
+
+
+################################################################################
+# Nettoyer
+################################################################################
+
+* Running gnatclean... ok
+
+
+################################################################################
+# Exercice 1
+################################################################################
+
+
+================================================================================
+## Modifications de lca.ads
+================================================================================
+
+* Comparaison de lca.ads et fournis/lca.ads... différents
+
+   |         type tKey is private;                                                             |          type T_Cle is private;
+   |         type tValue is private;                                                           |          type T_Valeur is private;
+   |     type tNode is private;                                                                |          type T_LCA is limited private;
+   |     type tLCA is private;                                                                 <
+   |         procedure Initialiser(Sda: out tLCA) with                                         |          procedure Initialiser(Sda: out T_LCA) with
+   |         procedure Detruire (Sda : in out tLCA);                                           |          procedure Detruire (Sda : in out T_LCA);
+   |         function Est_Vide (Sda : in tLCA) return Boolean;                                 |          function Est_Vide (Sda : in T_LCA) return Boolean;
+   |         function Taille (Sda : in tLCA) return Integer with                               |          function Taille (Sda : in T_LCA) return Integer with
+   |         procedure Enregistrer (Sda : in out tLCA ; Cle : in tKey ; Valeur : in tValue) wi |          procedure Enregistrer (Sda : in out T_LCA ; Cle : in T_Cle ; Valeur : in T_Valeur
+   |         procedure Supprimer (Sda : in out tLCA ; Cle : in tKey) with                      |          procedure Supprimer (Sda : in out T_LCA ; Cle : in T_Cle) with
+   |         function Cle_Presente (Sda : in tLCA ; Cle : in tKey) return Boolean;             |          function Cle_Presente (Sda : in T_LCA ; Cle : in T_Cle) return Boolean;
+   |         function La_Valeur (Sda : in tLCA ; Cle : in tKey) return tValue;                 |          function La_Valeur (Sda : in T_LCA ; Cle : in T_Cle) return T_Valeur;
+   |                 with procedure Traiter (Cle : in tKey; Valeur: in tValue);                |                  with procedure Traiter (Cle : in T_Cle; Valeur: in T_Valeur);
+   |         procedure Pour_Chaque (Sda : in tLCA);                                            |          procedure Pour_Chaque (Sda : in T_LCA);
+   |                 with procedure Afficher_Cle (Cle : in tKey);                              |                  with procedure Afficher_Cle (Cle : in T_Cle);
+   |                 with procedure Afficher_Donnee (Valeur : in tValue);                      |                  with procedure Afficher_Donnee (Valeur : in T_Valeur);
+   |         procedure Afficher_Debug (Sda : in tLCA);                                         |          procedure Afficher_Debug (Sda : in T_LCA);
+   |         type tNodePointer is access tNode;                                                |          -- TODO : a completer
+   |                                                                                           <
+   |         type tNode is record                                                              <
+   |                 key : tKey;                                                               <
+   |                 value : tValue;                                                           <
+   |                 next : tNodePointer;                                                      <
+   |         end record;                                                                       <
+   |                                                                                           <
+   |         type tLCA is record                                                               <
+   |                 size : Integer;                                                           <
+   |                 head : tNodePointer;                                                      <
+   |         end record;                                                                       <
+
+
+================================================================================
+## Exécution de lca_sujet.adb
+================================================================================
+
+* Compilation de lca_sujet.adb... ok
+* ./lca_sujet... ok
+* valgrind ./lca_sujet... ok
+
+================================================================================
+## Exécution de test_lca.adb
+================================================================================
+
+* Compilation de test_lca.adb... ok
+* ./test_lca... ok
+* valgrind ./test_lca... ok
+
+
+################################################################################
+# Nettoyer
+################################################################################
+
+* Running gnatclean... ok
+
+<!-- vi: set ts=8: -->

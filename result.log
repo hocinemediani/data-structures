@@ -1,0 +1,264 @@
+Après insertion de la clé "un"
+"un" : 1
+
+Après insertion de la clé "deux"
+"un" : 1
+"deux" : 2
+
+Après insertion de la clé "trois"
+"un" : 1
+"deux" : 2
+"trois" : 3
+
+Après insertion de la clé "quatre"
+"un" : 1
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+
+Après insertion de la clé "cinq"
+"un" : 1
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+
+Après insertion de la clé "quatre-vingt-dix-neuf"
+"un" : 1
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+
+Après insertion de la clé "vingt-et-un"
+"un" : 1
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+=== Tester_Supprimer_Inverse...
+
+Après suppression de "vingt-et-un" :
+"un" : 1
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+
+Après suppression de "quatre-vingt-dix-neuf" :
+"un" : 1
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+
+Après suppression de "cinq" :
+"un" : 1
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+
+Après suppression de "quatre" :
+"un" : 1
+"deux" : 2
+"trois" : 3
+
+Après suppression de "trois" :
+"un" : 1
+"deux" : 2
+
+Après suppression de "deux" :
+"un" : 1
+
+Après suppression de "un" :
+
+=== Tester_Supprimer...
+
+Suppression de "un" :
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Suppression de "deux" :
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Suppression de "trois" :
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Suppression de "quatre" :
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Suppression de "cinq" :
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Suppression de "quatre-vingt-dix-neuf" :
+"vingt-et-un" : 21
+
+Suppression de "vingt-et-un" :
+
+=== Tester_Supprimer_Un_Element...
+
+Suppression de "un" :
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Suppression de "deux" :
+"un" : 1
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Suppression de "trois" :
+"un" : 1
+"deux" : 2
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Suppression de "quatre" :
+"un" : 1
+"deux" : 2
+"trois" : 3
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Suppression de "cinq" :
+"un" : 1
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Suppression de "quatre-vingt-dix-neuf" :
+"un" : 1
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+"vingt-et-un" : 21
+
+Suppression de "vingt-et-un" :
+"un" : 1
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+
+=== Tester_Remplacer_Un_Element...
+
+Mise à jour de "un" avec  0 :
+"un" : 0
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Mise à jour de "deux" avec  0 :
+"un" : 1
+"deux" : 0
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Mise à jour de "trois" avec  0 :
+"un" : 1
+"deux" : 2
+"trois" : 0
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Mise à jour de "quatre" avec  0 :
+"un" : 1
+"deux" : 2
+"trois" : 3
+"quatre" : 0
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Mise à jour de "cinq" avec  0 :
+"un" : 1
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+"cinq" : 0
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 21
+
+Mise à jour de "quatre-vingt-dix-neuf" avec  0 :
+"un" : 1
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 0
+"vingt-et-un" : 21
+
+Mise à jour de "vingt-et-un" avec  0 :
+"un" : 1
+"deux" : 2
+"trois" : 3
+"quatre" : 4
+"cinq" : 5
+"quatre-vingt-dix-neuf" : 99
+"vingt-et-un" : 0
+
+=== Tester_Supprimer_Erreur...
+
+=== Tester_La_Valeur_Erreur...
+
+=== Tester_Pour_Chaque...
+
+ +  1
+ +  2
+ +  3
+ +  4
+ +  5
+ + 99
+ + 21
+
+=== Tester_Pour_Chaque_Somme_Si_Cle_Commence_Par_Q...
+
+ +  4
+ + 99
+
+=== Tester_Pour_Chaque_Somme_Len4_Avec_Exception...
+
+ +  2
+ +  5
+
+Fin des tests : OK.
