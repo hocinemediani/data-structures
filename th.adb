@@ -112,13 +112,30 @@ package body TH is
     end Delete;
 
 
-    function IsIn (Hashmap : in hashMap; Key : in String) return Boolean is
+    function IsIn (HashMap : in hashMap; NodeArray : in NodeArray; Key : in String) return Boolean is
+    
+    current : entryNodePointer;
+    
     begin
-
+        -- Exploring the hash map.
+        for i in 1..HashMap.length loop
+            current := NodeArray (i);
+            -- Exploring the linked lists.
+            while current /= null loop
+                if current.key = Key then
+                    return True;
+                end if;
+                current := current.next;
+            end loop;
+        end loop;
+        return False;
     end IsIn;
 
 
     function ValueOf (HashMap : in hashMap; Key : in String) return Integer is
+
+    
+
     begin
 
     end ValueOf;
