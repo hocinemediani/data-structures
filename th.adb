@@ -55,7 +55,7 @@ package body TH is
             end if;
         end loop;
         HashMap.size := 0;
-    end Destroy;
+    end DestroyHashMap;
 
 
     function IsEmpty (HashMap : in hashMap) return Boolean is
