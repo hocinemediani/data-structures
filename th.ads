@@ -1,3 +1,8 @@
+generic
+    type nodeKey is private;
+    type nodeValue is private;
+    type arrayLength is private;
+
 package TH is
 
     type entryNode is private;
@@ -21,20 +26,20 @@ package TH is
     -- Get the number of elements in a hash map.
     function GetSize (HashTable : in hashMap) return Integer with
         Post => GetSize'Result >= 0
-            and (Taille'Result = 0) = IsEmpty (HashTable);
+            and (GetSize'Result = 0) = IsEmpty (HashTable);
 
 
     -- Registers a new value associated to a key or update it.
-    procedure Register (HashTable : in out HashTable; EntryNodeArray : in out nodeArray; Key : in String; Value : in Integer) with
-        Post => IsIn(HashTable, Key) and (ValueOf (HashTable, Key) = Key)
-            and (not (IsIn (HashTable, Key)'Old) or GetSize (HashTable) = GetSize (HashTable)'Old)
-            and (IsIn (HashTable, Key)'Old or GetSize (HashTable) = GetSize (HashTable)'Old + 1);
+    procedure Register (HashTable : in out hashMap; EntryNodeArray : in out nodeArray; Key : in String; Value : in Integer) with
+        Post => IsIn(HashTable, EntryNodeArray, Key) and (ValueOf (HashTable, EntryNodeArray, Key) = Value)
+            and (not (IsIn (HashTable, EntryNodeArray, Key)'Old) or GetSize (HashTable) = GetSize (HashTable)'Old)
+            and (IsIn (HashTable, EntryNodeArray, Key)'Old or GetSize (HashTable) = GetSize (HashTable)'Old + 1);
 
 
     -- Deletes a node in the hash map with the exception Cle_Absente_Exception.
     procedure Delete (HashTable : in out hashMap; EntryNodeArray : in out nodeArray; Key : in String) with
         Post => GetSize (HashTable) = GetSize (HashTable)'Old - 1
-            and not IsIn (HashTable, Key);
+            and not IsIn (HashTable, EntryNodeArray, Key);
 
 
     -- Check if a key is in the hash map.
@@ -54,8 +59,8 @@ private
     type entryNodePointer is access entryNode;
 
     type entryNode is record
-        key : String;
-        value : Integer;
+        key : nodeKey;
+        value : nodeValue;
         -- Only used if two or more nodes have the same hashed key.
         next : entryNodePointer;
     end record;
@@ -68,6 +73,6 @@ private
     end record;
 
     type nodeArray is
-        array(arrayLength) of entryNodePointer;
+        array(1 .. arrayLength) of entryNodePointer;
 
 end TH;

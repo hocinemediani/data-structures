@@ -188,10 +188,10 @@ package body TH is
             current := EntryNodeArray (i);
             Put(i);
             if current.next = null then
-                Put("-->[" + '"' + current.key + '"' + " : " + current.value + "]");
+                Put("-->[" & '"''Image + current.key & '"''Image + " : " + current.value + "]");
             elsif current.next /= null then
                 while current /= null loop
-                    Put("-->[" + '"' + current.key + '"' + " : " + current.value + "]");
+                    Put("-->[" & '"''Image + current.key & '"''Image + " : " + current.value + "]");
                 end loop;
             end if;
             Put("--E");
