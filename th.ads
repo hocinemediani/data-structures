@@ -6,47 +6,47 @@ package TH is
 
 
     -- Initialize an empty hash map.
-    procedure InitialiseHashMap (HashMap : out hashMap; Length : in Integer; NodeArray : out nodeArray) with
-        Post => IsEmpty (HashMap);
+    procedure InitialiseHashTable (HashTable : out hashMap; Length : in Integer; EntryNodeArray : out nodeArray) with
+        Post => IsEmpty (HashTable);
 
 
     -- Destroy the hash map.
-    procedure DestroyHashMap (HashMap : in out hashMap; NodeArray : in nodeArray);
+    procedure DestroyHashTable (HashTable : in out hashMap; EntryNodeArray : in nodeArray);
 
 
     -- Check if a hash map is empty.
-    function IsEmpty (HashMap : in hashMap) return Boolean;
+    function IsEmpty (HashTable : in hashMap) return Boolean;
 
 
     -- Get the number of elements in a hash map.
-    function GetSize (HashMap : in hashMap) return Integer with
+    function GetSize (HashTable : in hashMap) return Integer with
         Post => GetSize'Result >= 0
-            and (Taille'Result = 0) = IsEmpty (HashMap);
+            and (Taille'Result = 0) = IsEmpty (HashTable);
 
 
     -- Registers a new value associated to a key or update it.
-    procedure Register (HashMap : in out HashMap; NodeArray : in out nodeArray; Key : in String; Value : in Integer) with
-        Post => IsIn(HashMap, Key) and (ValueOf (HashMap, Key) = Key)
-            and (not (IsIn (HashMap, Key)'Old) or GetSize (HashMap) = GetSize (HashMap)'Old)
-            and (IsIn (HashMap, Key)'Old or GetSize (HashMap) = GetSize (HashMap)'Old + 1);
+    procedure Register (HashTable : in out HashTable; EntryNodeArray : in out nodeArray; Key : in String; Value : in Integer) with
+        Post => IsIn(HashTable, Key) and (ValueOf (HashTable, Key) = Key)
+            and (not (IsIn (HashTable, Key)'Old) or GetSize (HashTable) = GetSize (HashTable)'Old)
+            and (IsIn (HashTable, Key)'Old or GetSize (HashTable) = GetSize (HashTable)'Old + 1);
 
 
     -- Deletes a node in the hash map with the exception Cle_Absente_Exception.
-    procedure Delete (HashMap : in out hashMap; NodeArray : in out nodeArray; Key : in String) with
-        Post => GetSize (HashMap) = GetSize (HashMap)'Old - 1
-            and not IsIn (HashMap, Key);
+    procedure Delete (HashTable : in out hashMap; EntryNodeArray : in out nodeArray; Key : in String) with
+        Post => GetSize (HashTable) = GetSize (HashTable)'Old - 1
+            and not IsIn (HashTable, Key);
 
 
     -- Check if a key is in the hash map.
-    function IsIn (HashMap : in hashMap; NodeArray : in nodeArray; Key : in String) return Boolean;
+    function IsIn (HashTable : in hashMap; EntryNodeArray : in nodeArray; Key : in String) return Boolean;
 
 
     -- Get the value associated to a key with the exception Cle_Absente_Exception.
-    function ValueOf (HashMap : in hashMap; NodeArray : in nodeArray; Key : in String) return Integer;
+    function ValueOf (HashTable : in hashMap; EntryNodeArray : in nodeArray; Key : in String) return Integer;
 
 
     -- Display the hash map.
-    procedure Display (HashMap : in hashMap; NodeArray : in nodeArray);
+    procedure Display (HashTable : in hashMap; EntryNodeArray : in nodeArray);
 
 
 private
