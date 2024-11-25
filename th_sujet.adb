@@ -9,7 +9,7 @@ procedure th_sujet is
    arrayLength : Integer := 11;
    
    package hashTableSujet is
-      new TH(nodeKey => Unbounded_String, nodeValue => Integer, arrayLength => Integer);
+      new TH(nodeKey => Unbounded_String, nodeValue => Integer);
 
    use hashTableSujet;
 

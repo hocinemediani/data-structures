@@ -1,13 +1,13 @@
 generic
     type nodeKey is private;
     type nodeValue is private;
-    type arrayLength is private;
 
 package TH is
 
     type entryNode is private;
     type hashMap is private;
     type nodeArray is private;
+    arrayLength : Integer;
 
 
     -- Initialize an empty hash map.
