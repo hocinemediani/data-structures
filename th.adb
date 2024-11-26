@@ -8,36 +8,25 @@ package body TH is
         new Ada.Unchecked_Deallocation (Object => entryNode, Name => entryNodePointer);
 
 
-    procedure InitialiseHashTable (HashTable : out hashMap; Length : in Integer; EntryNodeArray : out nodeArray) is
-
-    -- Type used to initialize "nodeArrays" in th.ads.
-    type arrayLength is range 1..Length;
-    current : entryNodePointer;
-
+    procedure InitialiseHashTable (HashTable : in out hashMap; Length : in Integer) is
     begin
         HashTable.size := 0;
         HashTable.length := Length;
         -- Initializing each node to be null.
-        for i in 1..Length loop
-            declare
-                newNode : CONSTANT entryNodePointer := new entryNode' (key => null, value => null, next => null, hashedKey => null);
-            begin
-                current := newNode;
-                -- Keeping track of pointors in an array.
-                EntryNodeArray (i) := current;
-            end;
+        for i in 1..HashTable.entryNodeArray'Length loop
+                HashTable.entryNodeArray (i) := null;
         end loop;
     end InitialiseHashTable;
 
 
-    procedure DestroyHashTable (HashTable : in out hashMap; EntryNodeArray : in nodeArray) is
+    procedure DestroyHashTable (HashTable : in out hashMap) is
 
     current, previous : entryNodePointer;
 
     begin
         -- Exploring the nodes.
-        for i in 1..HashTable.length loop
-            current := EntryNodeArray (i);
+        for i in 1..HashTable.entryNodeArray'Length loop
+            current := HashTable.entryNodeArray (i);
             -- If there isn't conflict with the hash key.
             if current.next = null then
                 Free (current);
@@ -65,21 +54,21 @@ package body TH is
     end IsEmpty;
 
 
-    function GetSize (HashTable : in hashMap) return Integer is
+    function GetSize (HashTable : in hashMap) return nodeValue is
     begin
         return HashTable.size;
     end GetSize;
 
 
-    procedure Register (HashTable : in out HashTable; EntryNodeArray : in out nodeArray; Key : in String; Value : in Integer) is
+    procedure Register (HashTable : in out hashMap; Key : in nodeKey; Value : in nodeValue) is
 
     current : entryNodePointer;
-    hashedKey : Integer := Key'Length mod HashTable.length;
+    hashedKey : nodeValue := Key'Length mod HashTable.length;
 
     begin
-        current := EntryNodeArray (hashedKey);
+        current := HashTable.entryNodeArray (hashedKey);
         -- If there is no existing occurence with the said hash key.
-        if EntryNodeArray (HashedKey).value = null then
+        if HashTable.entryNodeArray (HashedKey).value = null then
             current.key := Key;
             current.value := Value;
             HashTable.size := HashTable.size + 1;
@@ -104,18 +93,18 @@ package body TH is
     end Register;
 
 
-    procedure Delete (HashTable : in out hashMap; EntryNodeArray : in out nodeArray; Key : in String) is
+    procedure Delete (HashTable : in out hashMap; Key : in nodeKey) is
 
     current : entryNodePointer;
-    hashedKey : Integer := Key'Length mod HashTable.length;
+    hashedKey : nodeValue := Key'Length mod HashTable.length;
 
     begin
-        current := EntryNodeArray (hashedKey);
+        current := HashTable.entryNodeArray (hashedKey);
         if current.key = Key then
             if current.next = null then
-                EntryNodeArray (hashedKey) := null;
+                HashTable.entryNodeArray (hashedKey) := null;
             else
-                EntryNodeArray (hashedKey) := current;
+                HashTable.entryNodeArray (hashedKey) := current;
             end if;
             Free (current);
         else
@@ -123,9 +112,9 @@ package body TH is
             while current /= null loop
                 if current.key = Key then
                     if current.next = null then
-                        EntryNodeArray (hashedKey) := null;
+                        HashTable.entryNodeArray (hashedKey) := null;
                     else
-                        EntryNodeArray (hashedKey) := current;
+                        HashTable.entryNodeArray (hashedKey) := current;
                     end if;
                     Free (current);
                 end if;
@@ -135,13 +124,13 @@ package body TH is
     end Delete;
 
 
-    function IsIn (HashTable : in hashMap; EntryNodeArray : in EntryNodeArray; Key : in String) return Boolean is
+    function IsIn (HashTable : in hashMap; Key : in nodeKey) return Boolean is
     
     current : entryNodePointer;
-    hashedKey : Integer := Key'Length mod HashTable.length;
+    hashedKey : nodeValue := Key'Length mod HashTable.length;
     
     begin
-        current := EntryNodeArray (hashedKey);
+        current := HashTable.EntryNodeArray (hashedKey);
         if current.key = Key then
             return True;
         elsif current.next /= null then
@@ -157,13 +146,13 @@ package body TH is
     end IsIn;
 
 
-    function ValueOf (HashTable : in hashMap; EntryNodeArray : in nodeArray; Key : in String) return Integer is
+    function ValueOf (HashTable : in hashMap; Key : in nodeKey) return nodeValue is
 
     current : entryNodePointer;
-    hashedKey : Integer := Key'Length mod HashTable.length;
+    hashedKey : nodeValue := Key'Length mod HashTable.length;
 
     begin
-        current := EntryNodeArray (hashedKey);
+        current := HashTable.entryNodeArray (hashedKey);
         if current.key = Key then
             return current.value;
         elsif current.next /= null then
@@ -179,23 +168,29 @@ package body TH is
     end ValueOf;
 
 
-    procedure Display (HashTable : in hashMap; EntryNodeArray : in nodeArray) is
+    procedure Display (Key : in nodeKey; Value : in nodeValue) is
+    begin
+        Put ("-->["); Put ('"''Image); Put (Key); Put ('"''Image); Put (" : "); Put (Value'Image); Put("]");
+    end Display;
+
+
+    procedure DisplayHashTable (HashTable : in hashMap) is
 
     current : entryNodePointer;
         
     begin
-        for i in 1..HashTable.length loop
-            current := EntryNodeArray (i);
-            Put(i);
-            if current.next = null then
-                Put("-->[" & '"''Image + current.key & '"''Image + " : " + current.value + "]");
-            elsif current.next /= null then
-                while current /= null loop
-                    Put("-->[" & '"''Image + current.key & '"''Image + " : " + current.value + "]");
+        for i in 1..HashTable.entryNodeArray'Length loop
+            current := HashTable.entryNodeArray (i);
+            Put (i, 1); Put (" : ");
+            if current /= null then
+                Display (current.key, current.value);
+                while current.next /= null loop
+                    Display (current.key, current.value);
+                    current := current.next;
                 end loop;
             end if;
-            Put("--E");
+            Put ("--E");
         end loop;
-    end Display;
+    end DisplayHashTable;
 
 end TH;
