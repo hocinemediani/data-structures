@@ -18,7 +18,7 @@ procedure th_sujet is
 
    HashTable : hashMap;
 
-   Key1 : CONSTANT Unbounded_String := +"un";
+   Key1 : CONSTANT Unbounded_String := +"uo";
    Key2 : CONSTANT Unbounded_String := +"cinq";
    Key3 : CONSTANT Unbounded_String := +"de";
    Key4 : CONSTANT Unbounded_String := +"bu";
@@ -31,9 +31,11 @@ procedure th_sujet is
    Value5 : CONSTANT Integer := 45699;
    Value6 : CONSTANT Integer := 1111;
 
+   arrayLength : CONSTANT Integer := 11;
+
 begin
 
-   InitialiseHashTable (HashTable, 11);
+   InitialiseHashTable (HashTable, arrayLength);
 
    Register (HashTable, Key1, Value1);
    Register (HashTable, Key2, Value2);
@@ -44,15 +46,14 @@ begin
 
    DisplayHashTable (HashTable);
 
-   Delete (HashTable, Key1);
+   -- Problèmes à regler :
+      -- Les clefs ne sont pas bien enregistrés (pour une hashedKey données, toutes les entrées sont égales).
+      -- Reprendre la fonction DestroyHashMap et vérifier avec valgrind la présence ou non de memory leaks.
+      -- Reprendre les autres fonction en supprimant les redondances et en profitant de la structure des hashTables pour optimiser le code.
+
+   DestroyHashTable (HashTable);
 
    DisplayHashTable (HashTable);
-
-   Delete (HashTable, Key4);
-
-   DisplayHashTable(HashTable);
-   
-   DestroyHashTable (HashTable);
 
    Put_Line ("Test completed.");
 
