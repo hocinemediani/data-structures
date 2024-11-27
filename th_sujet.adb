@@ -27,9 +27,6 @@ begin
    InitialiseHashTable (HashTable, arrayLength);
 
    Register (HashTable, Keys (0), 1);
-   Register (HashTable, +"ddddddddddd", 50);
-   Register (HashTable, +"ddddddddezd", 78);
-   Register (HashTable, +"dddddazdddd", 485);
    Register (HashTable, Keys (1), 2);
    Register (HashTable, Keys (2), 3);
    Register (HashTable, Keys (3), 4);
@@ -37,21 +34,21 @@ begin
    Register (HashTable, Keys (5), 21);
    Register (HashTable, Keys (6), 99);
 
+   New_Line;
+
+   Put_Line ("Displaying the fully initiated hash table :");
    DisplayHashTable (HashTable);
 
-   -- Problèmes à regler :
-      -- Les clefs ne sont pas bien enregistrés (pour une hashedKey donnée, toutes les entrées sont égales).
-      -- Reprendre la fonction DestroyHashMap et vérifier avec valgrind la présence ou non de memory leaks.
-      -- Reprendre les autres fonction en supprimant les redondances et en profitant de la structure des hashTables pour optimiser le code.
-
-   Delete (HashTable, +"cinq");
+   Delete (HashTable, +"deux");
    Delete (HashTable, +"vingt-et-un");
    Delete (HashTable, +"trois");
 
+   Put_Line ("Displaying the hash table after deleting 'deux', 'vingt-et-un', and 'trois' :");
    DisplayHashTable (HashTable);
 
    DestroyHashTable (HashTable);
 
+   Put_Line ("Displaying the hash table after it has been destructed :");
    DisplayHashTable (HashTable);
 
    Put_Line ("Test completed.");

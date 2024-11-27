@@ -106,6 +106,7 @@ package body TH is
                previous.next := null;
             end if;
             Free (current);
+            HashTable.size := HashTable.size - 1;
             return;
          end if;
          previous := current;
@@ -121,17 +122,12 @@ package body TH is
     
    begin
       current := HashTable.EntryNodeArray (hashedKey);
-      if current.key = Key then
-         return True;
-      elsif current.next /= null then
+      while current /= null loop
+         if current.key = Key then
+            return True;
+         end if;
          current := current.next;
-         while current /= null loop
-            if current.key = Key then
-               return True;
-            end if;
-            current := current.next;
-         end loop;
-      end if;
+      end loop;
       return False;
    end IsIn;
 
@@ -143,17 +139,12 @@ package body TH is
 
    begin
       current := HashTable.entryNodeArray (hashedKey);
-      if current.key = Key then
-         return current.value;
-      elsif current.next /= null then
+      while current /= null loop
+         if current.key = Key then
+            return current.value;
+         end if;
          current := current.next;
-         while current /= null loop
-            if current.key = Key then
-               return current.value;
-            end if;
-            current := current.next;
-         end loop;
-      end if;
+      end loop;
       raise Cle_Absente_Exception;
    end ValueOf;
 
