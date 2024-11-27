@@ -5,7 +5,10 @@ with TH;
 procedure th_sujet is
 
    package hashTableSujet is
-      new TH (nodeKey => Unbounded_String, nodeValue => Integer);
+      new TH (
+         nodeKey => Unbounded_String, 
+         nodeValue => Integer
+         );
 
    use hashTableSujet;
 
@@ -17,27 +20,28 @@ procedure th_sujet is
 
    Key1 : CONSTANT Unbounded_String := +"un";
    Key2 : CONSTANT Unbounded_String := +"cinq";
+   Key3 : CONSTANT Unbounded_String := +"de";
+   Key4 : CONSTANT Unbounded_String := +"bu";
+   Key5 : CONSTANT Unbounded_String := +"ap";
    Value1 : CONSTANT Integer := 42;
    Value2 : CONSTANT Integer := 51;
+   Value3 : CONSTANT Integer := 51;
+   Value4 : CONSTANT Integer := 888;
+   Value5 : CONSTANT Integer := 45699;
 
 begin
    -- Initialize the hash table
-   InitialiseHashTable (HashTable, 2);
+   InitialiseHashTable (HashTable, 11);
 
    -- Register entries
    Register (HashTable, Key1, Value1);
    Register (HashTable, Key2, Value2);
+   Register (HashTable, Key3, Value3);
+   Register (HashTable, Key4, Value4);
+   Register (HashTable, Key5, Value5);
 
    -- Display the hash table
    DisplayHashTable (HashTable);
-
-   -- Retrieve a value
-   declare
-      Retrieved_Value : Integer;
-   begin
-      Retrieved_Value := ValueOf (HashTable, Key1);
-      Put_Line ("Retrieved Value: " & Integer'Image(Retrieved_Value));
-   end;
 
    -- Delete an entry
    Delete (HashTable, Key1);

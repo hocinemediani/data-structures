@@ -1,3 +1,5 @@
+with Ada.Strings.Unbounded;  use Ada.Strings.Unbounded;
+
 generic
    
    type nodeKey is private;
@@ -30,28 +32,28 @@ package TH is
 
 
    -- Registers a new value associated to a key or update it.
-   procedure Register (HashTable : in out hashMap; Key : in nodeKey; Value : in nodeValue) with
+   procedure Register (HashTable : in out hashMap; Key : in Unbounded_String; Value : in Integer) with
       Post => IsIn(HashTable, Key) and (ValueOf (HashTable, Key) = Value)
          and (not (IsIn (HashTable, Key)'Old) or GetSize (HashTable) = GetSize (HashTable)'Old)
          and (IsIn (HashTable, Key)'Old or GetSize (HashTable) = GetSize (HashTable)'Old + 1);
 
 
    -- Deletes a node in the hash map with the exception Cle_Absente_Exception.
-   procedure Delete (HashTable : in out hashMap; Key : in nodeKey) with
+   procedure Delete (HashTable : in out hashMap; Key : in Unbounded_String) with
       Post => GetSize (HashTable) = GetSize (HashTable)'Old - 1
          and not IsIn (HashTable, Key);
 
 
    -- Check if a key is in the hash map.
-   function IsIn (HashTable : in hashMap; Key : in nodeKey) return Boolean;
+   function IsIn (HashTable : in hashMap; Key : in Unbounded_String) return Boolean;
 
 
    -- Get the value associated to a key with the exception Cle_Absente_Exception.
-   function ValueOf (HashTable : in hashMap; Key : in nodeKey) return nodeValue;
+   function ValueOf (HashTable : in hashMap; Key : in Unbounded_String) return Integer;
 
 
    -- Display a node.
-   procedure Display (Key : in nodeKey; Value : in nodeValue);
+   procedure Display (Key : in Unbounded_String; Value : in Integer);
 
 
    -- Display the hash map.
@@ -60,13 +62,18 @@ package TH is
 
 private
 
+   type bullshitToMakeItWork is record
+      key : nodeKey;
+      value : nodeValue;
+   end record;
+
    type entryNodePointer is access entryNode;
 
    type nodeArray is array(1..11) of entryNodePointer;
 
    type entryNode is record
-      key : nodeKey;
-      value : nodeValue;
+      key : Unbounded_String;
+      value : Integer;
       -- Only used if two or more nodes have the same hashed key.
       next : entryNodePointer;
    end record;

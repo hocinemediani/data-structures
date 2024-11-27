@@ -1,4 +1,5 @@
 with Ada.Text_IO;            use Ada.Text_IO;
+with Ada.Integer_Text_IO;    use Ada.Integer_Text_IO;
 with SDA_Exceptions;         use SDA_Exceptions;
 with Ada.Unchecked_Deallocation;
 
@@ -13,7 +14,7 @@ package body TH is
         HashTable.size := 0;
         HashTable.length := Length;
         -- Initializing each node to be null.
-        for i in 1..HashTable.entryNodeArray'Length loop
+        for i in 1..11 loop
                 HashTable.entryNodeArray (i) := null;
         end loop;
     end InitialiseHashTable;
@@ -25,22 +26,21 @@ package body TH is
 
     begin
         -- Exploring the nodes.
-        for i in 1..HashTable.entryNodeArray'Length loop
+        for i in 1..11 loop
             current := HashTable.entryNodeArray (i);
-            -- If there isn't conflict with the hash key.
-            if current.next = null then
-                Free (current);
-            -- If there is conflict with the hash key.
-            elsif current.next /= null then
-                previous := current;
-                current := current.next;
-                while current.next /= null loop
-                    Free (previous);
+            if current /= null then
+                -- If there are conflicts with the hash key.
+                if current.next /= null then
                     previous := current;
                     current := current.next;
-                end loop;
-                Free (previous);
-                Free (current);
+                    while current.next /= null loop
+                        Free (previous);
+                        previous := current;
+                        current := current.next;
+                    end loop;
+                    Free (previous);
+                    Free (current);
+                end if;
             end if;
         end loop;
         HashTable.size := 0;
@@ -54,23 +54,26 @@ package body TH is
     end IsEmpty;
 
 
-    function GetSize (HashTable : in hashMap) return nodeValue is
+    function GetSize (HashTable : in hashMap) return Integer is
     begin
         return HashTable.size;
     end GetSize;
 
 
-    procedure Register (HashTable : in out hashMap; Key : in nodeKey; Value : in nodeValue) is
+    procedure Register (HashTable : in out hashMap; Key : in Unbounded_String; Value : in Integer) is
 
     current : entryNodePointer;
-    hashedKey : nodeValue := Key'Length mod HashTable.length;
+    hashedKey : CONSTANT Integer := To_String (Key)'Length;
 
     begin
         current := HashTable.entryNodeArray (hashedKey);
         -- If there is no existing occurence with the said hash key.
-        if HashTable.entryNodeArray (HashedKey).value = null then
-            current.key := Key;
-            current.value := Value;
+        if current = null then
+            declare
+                newNode : CONSTANT entryNodePointer := new entryNode' (key => Key, value => Value, next => null);
+            begin
+                HashTable.entryNodeArray (hashedKey) := newNode;
+            end;
             HashTable.size := HashTable.size + 1;
         else
             -- If the key is already mapped, we update the value.
@@ -93,18 +96,21 @@ package body TH is
     end Register;
 
 
-    procedure Delete (HashTable : in out hashMap; Key : in nodeKey) is
+    procedure Delete (HashTable : in out hashMap; Key : in Unbounded_String) is
 
     current : entryNodePointer;
-    hashedKey : nodeValue := Key'Length mod HashTable.length;
+    hashedKey : CONSTANT Integer := To_String (Key)'Length;
 
     begin
         current := HashTable.entryNodeArray (hashedKey);
+        if current = null then
+            return;
+        end if;
         if current.key = Key then
             if current.next = null then
                 HashTable.entryNodeArray (hashedKey) := null;
             else
-                HashTable.entryNodeArray (hashedKey) := current;
+                HashTable.entryNodeArray (hashedKey) := current.next;
             end if;
             Free (current);
         else
@@ -118,16 +124,17 @@ package body TH is
                     end if;
                     Free (current);
                 end if;
+                current := current.next;
             end loop;
         end if;
         raise Cle_Absente_Exception;
     end Delete;
 
 
-    function IsIn (HashTable : in hashMap; Key : in nodeKey) return Boolean is
+    function IsIn (HashTable : in hashMap; Key : in Unbounded_String) return Boolean is
     
     current : entryNodePointer;
-    hashedKey : nodeValue := Key'Length mod HashTable.length;
+    hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
     
     begin
         current := HashTable.EntryNodeArray (hashedKey);
@@ -146,10 +153,10 @@ package body TH is
     end IsIn;
 
 
-    function ValueOf (HashTable : in hashMap; Key : in nodeKey) return nodeValue is
+    function ValueOf (HashTable : in hashMap; Key : in Unbounded_String) return Integer is
 
     current : entryNodePointer;
-    hashedKey : nodeValue := Key'Length mod HashTable.length;
+    hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
 
     begin
         current := HashTable.entryNodeArray (hashedKey);
@@ -168,9 +175,9 @@ package body TH is
     end ValueOf;
 
 
-    procedure Display (Key : in nodeKey; Value : in nodeValue) is
+    procedure Display (Key : in Unbounded_String; Value : in Integer) is
     begin
-        Put ("-->["); Put ('"''Image); Put (Key); Put ('"''Image); Put (" : "); Put (Value'Image); Put("]");
+        Put("-->["); Put ('"'); Put (To_String (Key)); Put ('"'); Put (" : "); Put (Value, 1); Put("]");
     end Display;
 
 
@@ -179,9 +186,9 @@ package body TH is
     current : entryNodePointer;
         
     begin
-        for i in 1..HashTable.entryNodeArray'Length loop
+        for i in 1..11 loop
             current := HashTable.entryNodeArray (i);
-            Put (i, 1); Put (" : ");
+            Put (i); Put (" : ");
             if current /= null then
                 Display (current.key, current.value);
                 while current.next /= null loop
@@ -189,8 +196,9 @@ package body TH is
                     current := current.next;
                 end loop;
             end if;
-            Put ("--E");
+            New_Line;
         end loop;
+        Put ("--E");
     end DisplayHashTable;
 
 end TH;
