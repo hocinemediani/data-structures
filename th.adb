@@ -88,14 +88,28 @@ package body TH is
 
    procedure Delete (HashTable : in out hashMap; Key : in Unbounded_String) is
 
-   current, next : entryNodePointer;
+   previous, current : entryNodePointer;
    hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
 
    begin
       current := HashTable.entryNodeArray (hashedKey);
-      next := HashTable.entryNodeArray (hashedKey).next;
+      previous := HashTable.entryNodeArray (hashedKey);
       while current /= null loop
-         
+         if current.key = Key then
+            if current = HashTable.entryNodeArray (hashedKey) then
+               HashTable.entryNodeArray (hashedKey) := HashTable.entryNodeArray (hashedKey).next;
+            end if;
+            if current.next /= null then
+               previous.next := current.next;
+            end if;
+            if current.next = null then
+               previous.next := null;
+            end if;
+            Free (current);
+            return;
+         end if;
+         previous := current;
+         current := current.next;
       end loop;
    end Delete;
 
