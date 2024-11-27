@@ -69,7 +69,7 @@ private
 
    type entryNodePointer is access entryNode;
 
-   type nodeArray is array(1..11) of entryNodePointer;
+   type nodeArray is array(0..10) of entryNodePointer;
 
    type entryNode is record
       key : Unbounded_String;

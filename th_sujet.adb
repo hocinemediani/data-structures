@@ -23,11 +23,13 @@ procedure th_sujet is
    Key3 : CONSTANT Unbounded_String := +"de";
    Key4 : CONSTANT Unbounded_String := +"bu";
    Key5 : CONSTANT Unbounded_String := +"ap";
+   Key6 : CONSTANT Unbounded_String := +"apadadadadadadada";
    Value1 : CONSTANT Integer := 42;
    Value2 : CONSTANT Integer := 51;
    Value3 : CONSTANT Integer := 51;
    Value4 : CONSTANT Integer := 888;
    Value5 : CONSTANT Integer := 45699;
+   Value6 : CONSTANT Integer := 1111;
 
 begin
    -- Initialize the hash table
@@ -39,6 +41,7 @@ begin
    Register (HashTable, Key3, Value3);
    Register (HashTable, Key4, Value4);
    Register (HashTable, Key5, Value5);
+   Register (HashTable, Key6, Value6);
 
    -- Display the hash table
    DisplayHashTable (HashTable);
@@ -49,6 +52,10 @@ begin
    -- Display again after deletion
    DisplayHashTable (HashTable);
 
+   Delete (HashTable, Key4);
+
+   DisplayHashTable(HashTable);
+   
    -- Destroy the hash table
    DestroyHashTable (HashTable);
 

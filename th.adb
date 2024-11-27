@@ -14,7 +14,7 @@ package body TH is
         HashTable.size := 0;
         HashTable.length := Length;
         -- Initializing each node to be null.
-        for i in 1..11 loop
+        for i in 0..10 loop
                 HashTable.entryNodeArray (i) := null;
         end loop;
     end InitialiseHashTable;
@@ -26,7 +26,7 @@ package body TH is
 
     begin
         -- Exploring the nodes.
-        for i in 1..11 loop
+        for i in 0..10 loop
             current := HashTable.entryNodeArray (i);
             if current /= null then
                 -- If there are conflicts with the hash key.
@@ -63,7 +63,7 @@ package body TH is
     procedure Register (HashTable : in out hashMap; Key : in Unbounded_String; Value : in Integer) is
 
     current : entryNodePointer;
-    hashedKey : CONSTANT Integer := To_String (Key)'Length;
+    hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
 
     begin
         current := HashTable.entryNodeArray (hashedKey);
@@ -99,7 +99,7 @@ package body TH is
     procedure Delete (HashTable : in out hashMap; Key : in Unbounded_String) is
 
     current : entryNodePointer;
-    hashedKey : CONSTANT Integer := To_String (Key)'Length;
+    hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
 
     begin
         current := HashTable.entryNodeArray (hashedKey);
@@ -113,7 +113,8 @@ package body TH is
                 HashTable.entryNodeArray (hashedKey) := current.next;
             end if;
             Free (current);
-        else
+            return;
+        end if;
             current := current.next;
             while current /= null loop
                 if current.key = Key then
@@ -126,7 +127,6 @@ package body TH is
                 end if;
                 current := current.next;
             end loop;
-        end if;
         raise Cle_Absente_Exception;
     end Delete;
 
@@ -186,9 +186,9 @@ package body TH is
     current : entryNodePointer;
         
     begin
-        for i in 1..11 loop
+        for i in 0..10 loop
             current := HashTable.entryNodeArray (i);
-            Put (i); Put (" : ");
+            Put (i, 1); Put (" : ");
             if current /= null then
                 Display (current.key, current.value);
                 while current.next /= null loop
@@ -198,7 +198,8 @@ package body TH is
             end if;
             New_Line;
         end loop;
-        Put ("--E");
+        Put_Line("--E");
+        New_Line;
     end DisplayHashTable;
 
 end TH;
