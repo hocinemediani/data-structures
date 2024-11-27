@@ -32,10 +32,9 @@ procedure th_sujet is
    Value6 : CONSTANT Integer := 1111;
 
 begin
-   -- Initialize the hash table
+
    InitialiseHashTable (HashTable, 11);
 
-   -- Register entries
    Register (HashTable, Key1, Value1);
    Register (HashTable, Key2, Value2);
    Register (HashTable, Key3, Value3);
@@ -43,20 +42,16 @@ begin
    Register (HashTable, Key5, Value5);
    Register (HashTable, Key6, Value6);
 
-   -- Display the hash table
    DisplayHashTable (HashTable);
 
-   -- Delete an entry
    Delete (HashTable, Key1);
 
-   -- Display again after deletion
    DisplayHashTable (HashTable);
 
    Delete (HashTable, Key4);
 
    DisplayHashTable(HashTable);
    
-   -- Destroy the hash table
    DestroyHashTable (HashTable);
 
    Put_Line ("Test completed.");
