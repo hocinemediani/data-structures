@@ -22,25 +22,20 @@ package body TH is
 
    procedure DestroyHashTable (HashTable : in out hashMap) is
 
-   current, previous : entryNodePointer;
+   previous, current : entryNodePointer;
 
    begin
       -- Exploring the nodes.
-      for i in 0..10 loop
+      for i in 0 .. (HashTable.length - 1) loop
          current := HashTable.entryNodeArray (i);
          if current /= null then
-            -- If there are conflicts with the hash key.
-            if current.next /= null then
+            while current /= null loop
                previous := current;
-               current := current.next;
-               while current.next /= null loop
-                  Free (previous);
-                  previous := current;
-                  current := current.next;
-               end loop;
+               current := previous.next;
                Free (previous);
-               Free (current);
-            end if;
+            end loop;
+            Free (previous);
+            Free (current);
          end if;
          HashTable.entryNodeArray (i) := null;
       end loop;
@@ -48,156 +43,136 @@ package body TH is
     end DestroyHashTable;
 
 
-    function IsEmpty (HashTable : in hashMap) return Boolean is
-    begin
-        -- Size is the actual numbers of entry in the hash map.
-        return HashTable.size = 0;
-    end IsEmpty;
+   function IsEmpty (HashTable : in hashMap) return Boolean is
+   begin
+      -- Size is the actual numbers of entry in the hash map.
+      return HashTable.size = 0;
+   end IsEmpty;
 
 
-    function GetSize (HashTable : in hashMap) return Integer is
-    begin
-        return HashTable.size;
-    end GetSize;
+   function GetSize (HashTable : in hashMap) return Integer is
+   begin
+      return HashTable.size;
+   end GetSize;
 
 
    procedure Register (HashTable : in out hashMap; Key : in Unbounded_String; Value : in Integer) is
 
-   current, previous : entryNodePointer;
+   current, previous, firstNode : entryNodePointer;
    hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
 
    begin
-      previous := null;
       current := HashTable.entryNodeArray (hashedKey);
-      -- If there is no existing occurence with the said hash key.
-      if current /= null then
-         while current /= null loop
-            if current.key = Key then
-               current.value := Value;
-               return;
-            end if;
-            previous := current;
-            current := current.next;
-         end loop;
-      end if;
+      firstNode := current;
+      while current /= null loop
+         if current.key = Key then
+            current.value := Value;
+            return;
+         end if;
+         previous := current;
+         current := current.next;
+      end loop;
       declare
          newNode : CONSTANT entryNodePointer := new entryNode' (key => Key, value => Value, next => null);
       begin
-         current := newNode;
-         HashTable.size := HashTable.size + 1;
-         if previous /= null then      
-            previous.next := current;
+         if current = firstNode then
+            HashTable.entryNodeArray (hashedKey) := newNode;
+            HashTable.size := HashTable.size + 1;
             return;
          end if;
-         HashTable.entryNodeArray (hashedKey) := current;
+         previous.next := newNode;
+         HashTable.size := HashTable.size + 1;
       end;
-    end Register;
+   end Register;
 
 
    procedure Delete (HashTable : in out hashMap; Key : in Unbounded_String) is
+
+   previous, current : entryNodePointer;
+   hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
+
+   begin
+      current := HashTable.entryNodeArray (hashedKey);
+      previous := HashTable.entryNodeArray (hashedKey);
+      while current /= null loop
+         if current.key = Key then
+            if current = HashTable.entryNodeArray (hashedKey) then
+               HashTable.entryNodeArray (hashedKey) := HashTable.entryNodeArray (hashedKey).next;
+            end if;
+            if current.next /= null then
+               previous.next := current.next;
+            end if;
+            if current.next = null then
+               previous.next := null;
+            end if;
+            Free (current);
+            HashTable.size := HashTable.size - 1;
+            return;
+         end if;
+         previous := current;
+         current := current.next;
+      end loop;
+   end Delete;
+
+
+   function IsIn (HashTable : in hashMap; Key : in Unbounded_String) return Boolean is
+    
+   current : entryNodePointer;
+   hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
+    
+   begin
+      current := HashTable.EntryNodeArray (hashedKey);
+      while current /= null loop
+         if current.key = Key then
+            return True;
+         end if;
+         current := current.next;
+      end loop;
+      return False;
+   end IsIn;
+
+
+   function ValueOf (HashTable : in hashMap; Key : in Unbounded_String) return Integer is
 
    current : entryNodePointer;
    hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
 
    begin
       current := HashTable.entryNodeArray (hashedKey);
-      if current = null then
-         return;
-      end if;
-      if current.key = Key then
-         if current.next = null then
-            HashTable.entryNodeArray (hashedKey) := null;
-         else
-            HashTable.entryNodeArray (hashedKey) := current.next;
-         end if;
-         Free (current);
-         return;
-      end if;
-         current := current.next;
-         while current /= null loop
-            if current.key = Key then
-               if current.next = null then
-                  HashTable.entryNodeArray (hashedKey) := null;
-               else
-                  HashTable.entryNodeArray (hashedKey) := current;
-               end if;
-               Free (current);
-            end if;
-            current := current.next;
-         end loop;
-      raise Cle_Absente_Exception;
-    end Delete;
-
-
-    function IsIn (HashTable : in hashMap; Key : in Unbounded_String) return Boolean is
-    
-    current : entryNodePointer;
-    hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
-    
-    begin
-        current := HashTable.EntryNodeArray (hashedKey);
-        if current.key = Key then
-            return True;
-        elsif current.next /= null then
-            current := current.next;
-            while current /= null loop
-                if current.key = Key then
-                    return True;
-                end if;
-                current := current.next;
-            end loop;
-        end if;
-        return False;
-    end IsIn;
-
-
-    function ValueOf (HashTable : in hashMap; Key : in Unbounded_String) return Integer is
-
-    current : entryNodePointer;
-    hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
-
-    begin
-        current := HashTable.entryNodeArray (hashedKey);
-        if current.key = Key then
+      while current /= null loop
+         if current.key = Key then
             return current.value;
-        elsif current.next /= null then
-            current := current.next;
-            while current /= null loop
-                if current.key = Key then
-                    return current.value;
-                end if;
-                current := current.next;
-            end loop;
-        end if;
-        raise Cle_Absente_Exception;
-    end ValueOf;
+         end if;
+         current := current.next;
+      end loop;
+      raise Cle_Absente_Exception;
+   end ValueOf;
 
 
-    procedure Display (Key : in Unbounded_String; Value : in Integer) is
-    begin
-        Put("-->["); Put ('"'); Put (To_String (Key)); Put ('"'); Put (" : "); Put (Value, 1); Put("]");
-    end Display;
+   procedure Display (Key : in Unbounded_String; Value : in Integer) is
+   begin
+      Put("-->["); Put ('"'); Put (To_String (Key)); Put ('"'); Put (" : "); Put (Value, 1); Put("]");
+   end Display;
 
 
-    procedure DisplayHashTable (HashTable : in hashMap) is
+   procedure DisplayHashTable (HashTable : in hashMap) is
 
-    current : entryNodePointer;
+   current : entryNodePointer;
         
-    begin
-        for i in 0 .. (HashTable.length - 1) loop
-            current := HashTable.entryNodeArray (i);
-            Put (i, 1); Put (" : ");
-            if current /= null then
-                Display (HashTable.entryNodeArray (i).key, HashTable.entryNodeArray (i).value);
-                while current.next /= null loop
-                    Display (HashTable.entryNodeArray (i).key, HashTable.entryNodeArray (i).value);
-                    current := current.next;
-                end loop;
-            end if;
-            Put_Line("--E");
-        end loop;
-        New_Line;
-        Put ("Le nombre d'entree est de : "); Put (HashTable.size, 1); New_Line;
+   begin
+      for i in 0 .. (HashTable.length - 1) loop
+         current := HashTable.entryNodeArray (i);
+         Put (i, 1); Put (" : ");
+         if current /= null then
+            Display (HashTable.entryNodeArray (i).key, HashTable.entryNodeArray (i).value);
+            while current.next /= null loop
+               Display (current.next.key, current.next.value);
+               current := current.next;
+            end loop;
+         end if;
+         Put_Line("--E");
+      end loop;
+      New_Line;
     end DisplayHashTable;
 
 end TH;
