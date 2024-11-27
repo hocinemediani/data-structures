@@ -6,3 +6,6 @@ th_sujet.exe
 th_sujet.o
 th.ali
 th.o
+test_th.ali
+test_th.exe
+test_th.o

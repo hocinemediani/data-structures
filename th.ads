@@ -59,6 +59,11 @@ package TH is
    -- Display the hash map.
    procedure DisplayHashTable (HashTable : in hashMap);
 
+   -- Apply a treatment to all of the hash table.
+   generic
+		with procedure Treat (Cle : in Unbounded_String; Valeur: in Integer);
+	procedure ForAll (HashTable : in hashMap);
+
 
 private
 
