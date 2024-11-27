@@ -2,7 +2,7 @@ with Ada.Text_IO;           use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with TH;
 
-procedure th_sujet is
+procedure TH_Sujet is
 
    package hashTableSujet is
       new TH (
@@ -53,4 +53,4 @@ begin
 
    Put_Line ("Test completed.");
 
-end th_sujet;
+end TH_Sujet;

@@ -173,6 +173,25 @@ package body TH is
          Put_Line("--E");
       end loop;
       New_Line;
-    end DisplayHashTable;
+   end DisplayHashTable;
+
+
+   procedure ForAll (HashTable : in hashMap) is
+
+   current : entryNodePointer;
+
+   begin
+      for i in 0 .. (HashTable.length - 1) loop
+         current := HashTable.entryNodeArray (i);
+         while current /= null loop
+            begin
+               Treat (current.key, current.value);
+               exception
+                  when others => null;
+            end;
+            current := current.next;
+         end loop;
+      end loop;
+   end ForAll;
 
 end TH;
