@@ -36,7 +36,12 @@ Avantage :
 
 Indiquer ici les résultats obtenus.
 
-...
+Une table de hashage est, dans la majorité des cas, toujours meilleure en terme de compléxité temporelle qu'une liste chaînée associative.
+En effet, dans le meilleur des cas, lorsque l'on enregistre une entrée dans une table de hashage et que cette entrée à une clef de hashage
+unique, alors on peut avoir une compléxité constante en O (1). Sinon, lorsque la table commence à être surchargée avec de nombreuses entrées
+pour une même clef de hashage, alors on passe à un compléxité linéaire en O (n) où n désigne la taille de la LCA associée à la clef de hashage.
+Ainsi, une table de hashage aura toujours des performances meilleures, ou égales à celle d'une LCA, pour quelques bytes de mémoire de plus
+alloué pour le tableau de pointeurs qu'elle utilise. C'est donc, dans 100% des cas, un choix meilleur qu'une LCA.
 
 
 ## Qualité du générateur aléatoire
@@ -52,7 +57,14 @@ Indiquer les conclusions quant à la qualité du générateur aléatoire.
 Indiquer ici les principales difficultés rencontrées lors de la réalisation de
 ce projet et comment elles ont été surmontées ou contournéeS.
 
-...
+Surtout de l'ordre du debug. Implémenter les fonctions et comprendre ce qu'elle font et comment elles le font n'est
+pas si compliqué, mais ensuite comprendr pourquoi on enregistre une entrée deux fois, ou pourquoi la fonction supprimer
+ne supprime que la clef est la chose la plus compliquée. Ainsi, la majeure partie du temps à été passée à essayer de
+debug un programme polur ne pas réussir, puis sortir une feuille et un crayon et dessigner un exemple pour vraiment
+comprendre les cas partculiers à traiter nécessaires au bon fonctionnement du programme.
+Aussi, j'ai décidé d'implémenter la table de hashage sans avoir recours au module LCA, ce qui m'as pris beaucoup plus
+de temps. J'ai notamment perdu énormément de temps sur les types privés créés, qui, si ils sont finalement des types de
+base de Ada, n'ont pas forcément besoin d'être implémentés...
 
 
 
@@ -71,5 +83,7 @@ Cette partie peut être vide.
 
 Quel bilan personnel tirez-vous de ce mini-projet ?
 
-...
+Les tables de hachage sont cool. J'aime bien coder et galérer sur un problème pour finalement trouver une solution.
+Je n'aime pas avoir des consignes super précises sur comment implémenter mon programme car celà inhibe la "créativité"
+que je pourrais exprimer dans mon implémentation.
 
