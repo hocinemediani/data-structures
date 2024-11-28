@@ -13,7 +13,6 @@ package body TH is
    begin
       HashTable.size := 0;
       HashTable.length := Length;
-      -- Initializing each node to be null.
       for i in 0 .. (HashTable.length - 1) loop
          HashTable.entryNodeArray (i) := null;
       end loop;

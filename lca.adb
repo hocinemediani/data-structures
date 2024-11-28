@@ -36,7 +36,6 @@ package body LCA is
 	current : tNodePointer := Sda.head;
 
 	begin
-		-- Exploring the nodes.
 		while current /= null loop
 			Put("-->[");
 			Afficher_Cle(current.key);
@@ -65,25 +64,20 @@ package body LCA is
 	current, previous : tNodePointer := Sda.head;
 
 	begin
-		-- Searching for an occurence in the ADS to update.
 		while current /= null loop
 			if current.key = Cle then
 				current.value := Valeur;
 				return;
 			end if;
-			-- Updating the position of the search.
 			previous := current;
 			current := current.next;
 		end loop;
 		declare
-			-- If there is no existing occurence, creating the node.
 			newNode : CONSTANT tNodePointer := new tNode' (key => Cle, value => Valeur, next => null);
 		begin
-			-- In case the ADS is empty.
 			if previous = null then
 				Sda.head := newNode;
 			else
-				-- Could've also used current since when exiting the loop it is assigned to "null".
 				previous.next := newNode;
 			end if;
 			Sda.size := Sda.size + 1;
@@ -96,7 +90,6 @@ package body LCA is
 	current : tNodePointer := Sda.head;
 
 	begin
-		-- Exploring the nodes.
 		while current /= null loop
 			if current.key = Cle then
 				return True;
@@ -112,7 +105,6 @@ package body LCA is
 	current : tNodePointer := Sda.head;
 
 	begin
-		-- Exploring the nodes.
 		while current /= null loop
 		    if current.key = Cle then
 				return current.value;
@@ -128,7 +120,6 @@ package body LCA is
 	current, previous : tNodePointer := Sda.head;
 	
 	begin
-	    -- Exploring the nodes.
 	    while current /= null loop
 	        if current.key = Cle then
 	            if Sda.size = 1 then
@@ -157,7 +148,6 @@ package body LCA is
 		while current /= null loop
 		    begin
 		        Traiter(current.key, current.value);
-			-- Raising possible exceptions.
 		    exception
 				when others => null;
 		    end;

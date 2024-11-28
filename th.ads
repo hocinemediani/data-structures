@@ -4,6 +4,7 @@ generic
    
    type nodeKey is private;
    type nodeValue is private;
+   lengthArray : Integer;
 
 package TH is
 
@@ -74,7 +75,7 @@ private
 
    type entryNodePointer is access entryNode;
 
-   type nodeArray is array(0..10) of entryNodePointer;
+   type nodeArray is array(0..lengthArray) of entryNodePointer;
 
    type entryNode is record
       key : Unbounded_String;

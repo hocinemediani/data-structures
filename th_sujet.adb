@@ -4,10 +4,13 @@ with TH;
 
 procedure TH_Sujet is
 
+   arrayLength : CONSTANT Integer := 11;
+
    package hashTableSujet is
       new TH (
          nodeKey => Unbounded_String, 
-         nodeValue => Integer
+         nodeValue => Integer,
+         lengthArray => arrayLength
          );
 
    use hashTableSujet;
@@ -18,7 +21,6 @@ procedure TH_Sujet is
 
 
    HashTable : hashMap;
-   arrayLength : CONSTANT Integer := 11;
    Keys : CONSTANT array (0 .. 6) of Unbounded_String
       := (+"un", +"deux", +"trois", +"quatre", +"cinq", +"vingt-et-un", +"quatre-vingt-dix-neuf");
 

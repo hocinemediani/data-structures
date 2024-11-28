@@ -6,10 +6,13 @@ with TH;
 
 procedure Test_TH is
 
+   arrayLength : CONSTANT Integer := 11;
+
 	package TH_Test is
 		new TH (
          nodeKey => Unbounded_String,
-         nodeValue => Integer
+         nodeValue => Integer,
+         lengthArray => arrayLength
          );
 	use TH_Test;
 
@@ -38,7 +41,6 @@ procedure Test_TH is
 		renames To_Unbounded_String;
 
 
-   arrayLength : CONSTANT Integer := 11;
    Keys : CONSTANT array (0 .. 6) of Unbounded_String
       := (+"un", +"deux", +"trois", +"quatre", +"cinq", +"vingt-et-un", +"quatre-vingt-dix-neuf");
 	Inconnu : constant  Unbounded_String := To_Unbounded_String ("Inconnu");
