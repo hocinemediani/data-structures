@@ -1,0 +1,7 @@
+
+* Voir le retour général sur Moodle, rubrique TD & TP & Mini-projets.
+* Voir le retour automatique, fichier pr02/retour1-automatique.txt sur Gitlab.
+
+* Attention : le programme de test fourni ne doit pas être changé.
+  C'est à votre code de faire qu'il fonctionne.
+* Certains commentaires ne sont pas adaptés !
