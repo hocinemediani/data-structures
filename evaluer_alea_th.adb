@@ -116,8 +116,7 @@ procedure Evaluer_Alea_TH is
 				Max := MaxValue (Max, ValueOf (TH, +i));
 				Min := MinValue (Min, ValueOf (TH, +i));
 			end if;
-		end loop; 
-		DisplayHashTable (TH);
+		end loop;
 		DestroyHashTable (TH);
 	end Calculer_Statistiques;
 
