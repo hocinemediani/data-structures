@@ -1,11 +1,15 @@
 with Ada.Text_IO;          use Ada.Text_IO;
 with Ada.Integer_Text_IO;  use Ada.Integer_Text_IO;
 with Ada.Command_Line;     use Ada.Command_Line;
-with SDA_Exceptions;       use SDA_Exceptions;
 with Alea;
+with LCA;
 
 -- Évaluer la qualité du générateur aléatoire et les LCA.
 procedure Evaluer_Alea_LCA is
+
+   package LCA_Alea is
+		new LCA (T_Cle => Integer, T_Valeur => Integer);
+	use LCA_Alea;
 
 
 	-- Afficher l'usage.
@@ -71,9 +75,44 @@ procedure Evaluer_Alea_LCA is
 			new Alea (1, Borne);
 		use Mon_Alea;
 
+	randInt : Integer;
+	LCA : T_LCA;
+
+
+	function MaxValue(value1, value2 : in Integer) return Integer
+		renames Integer'Max;
+
+
+	function MinValue(value1, value2 : in Integer) return Integer
+		renames Integer'Min;
+
+
 	begin
-		null;	-- TODO à remplacer !
-	end Calculer_Statistiques;
+		if Borne <= 1 or Taille <= 1 then
+			Put ("Erreur sur l'appel");
+			Min := 0;
+			Max := 0;
+			return;
+		end if;
+		Initialiser (LCA);
+		for i in 0 .. (Taille - 1) loop
+			Get_Random_Number (randInt);
+			if Cle_Presente (LCA, randInt) then
+				Enregistrer (LCA, randInt, (randInt + 1));
+			else
+				Enregistrer (LCA, randInt, randInt);
+			end if;
+		end loop;
+		Min := Taille;
+		Max := 0;
+		for i in 1 .. Borne loop
+			if Cle_Presente (LCA, i) then
+				Max := MaxValue (Max, La_Valeur (LCA, i));
+				Min := MinValue (Min, La_Valeur (LCA, i));
+			end if;
+		end loop;
+		Detruire (LCA);
+		end Calculer_Statistiques;
 
 
 

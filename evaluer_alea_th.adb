@@ -1,12 +1,18 @@
 with Ada.Text_IO;          use Ada.Text_IO;
+with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Integer_Text_IO;  use Ada.Integer_Text_IO;
 with Ada.Command_Line;     use Ada.Command_Line;
-with SDA_Exceptions;       use SDA_Exceptions;
 with Alea;
+with TH;
 
 -- Évaluer la qualité du générateur aléatoire et les TH.
 procedure Evaluer_Alea_TH is
 
+	hashTableSize : CONSTANT Integer := 100001;
+
+	package TH_Alea is
+		new TH (nodeKey => Integer, nodeValue => Integer, lengthArray => hashTableSize);
+	use TH_Alea;
 
 	-- Afficher l'usage.
 	procedure Afficher_Usage is
@@ -43,7 +49,7 @@ procedure Evaluer_Alea_TH is
 	--    Borne > 1
 	--    Taille > 1
 	--
-	-- Assure : -- poscondition peu intéressante !
+	-- Assure : -- postcondition peu intéressante !
 	--    0 <= Min Et Min <= Taille
 	--    0 <= Max Et Max <= Taille
 	--    Min /= Max ==> Min + Max <= Taille
@@ -71,10 +77,49 @@ procedure Evaluer_Alea_TH is
 			new Alea (1, Borne);
 		use Mon_Alea;
 
-	begin
-		null;	-- TODO à remplacer !
-	end Calculer_Statistiques;
+	randInt : Integer;
+	TH : hashMap;
 
+
+	function "+" (Item : in Integer) return Unbounded_String
+		renames To_Unbounded_String;
+
+
+	function MaxValue(value1, value2 : in Integer) return Integer
+		renames Integer'Max;
+
+
+	function MinValue(value1, value2 : in Integer) return Integer
+		renames Integer'Min;
+
+
+	begin
+		if Borne <= 1 or Taille <= 1 then
+			Put ("Erreur sur l'appel");
+			Min := 0;
+			Max := 0;
+			return;
+		end if;
+		InitialiseHashTable (TH, hashTableSize);
+		for i in 1 .. Taille loop
+			Get_Random_Number (randInt);
+			if IsIn (TH, +randInt) then
+				Register (TH, +randInt, (randInt + 1));
+			else
+				Register (TH, +randInt, randInt);
+			end if;
+		end loop;
+		Min := Taille;
+		Max := 0;
+		for i in 1 .. Borne loop
+			if IsIn (TH, +i) then
+				Max := MaxValue (Max, ValueOf (TH, +i));
+				Min := MinValue (Min, ValueOf (TH, +i));
+			end if;
+		end loop; 
+		DisplayHashTable (TH);
+		DestroyHashTable (TH);
+	end Calculer_Statistiques;
 
 
 	Min, Max: Integer; -- fréquence minimale et maximale d'un échantillon
