@@ -1,5 +1,3 @@
-with Ada.Strings.Unbounded;  use Ada.Strings.Unbounded;
-
 generic
    
    type nodeKey is private;
@@ -33,53 +31,47 @@ package TH is
 
 
    -- Registers a new value associated to a key or update it.
-   procedure Register (HashTable : in out hashMap; Key : in Unbounded_String; Value : in Integer) with
-      Post => IsIn(HashTable, Key) and (ValueOf (HashTable, Key) = Value)
-         and (not (IsIn (HashTable, Key)'Old) or GetSize (HashTable) = GetSize (HashTable)'Old)
-         and (IsIn (HashTable, Key)'Old or GetSize (HashTable) = GetSize (HashTable)'Old + 1);
+   procedure Register (HashTable : in out hashMap; Key : in nodeKey; hashedKey : in Integer; Value : in nodeValue) with
+      Post => IsIn(HashTable, Key, hashedKey) and (ValueOf (HashTable, Key, hashedKey) = Value)
+         and (not (IsIn (HashTable, Key, hashedKey)'Old) or GetSize (HashTable) = GetSize (HashTable)'Old)
+         and (IsIn (HashTable, Key, hashedKey)'Old or GetSize (HashTable) = GetSize (HashTable)'Old + 1);
 
 
    -- Deletes a node in the hash map with the exception Cle_Absente_Exception.
-   procedure Delete (HashTable : in out hashMap; Key : in Unbounded_String) with
+   procedure Delete (HashTable : in out hashMap; Key : in nodeKey; hashedKey : in Integer) with
       Post => GetSize (HashTable) = GetSize (HashTable)'Old - 1
-         and not IsIn (HashTable, Key);
+         and not IsIn (HashTable, Key, hashedKey);
 
 
    -- Check if a key is in the hash map.
-   function IsIn (HashTable : in hashMap; Key : in Unbounded_String) return Boolean;
+   function IsIn (HashTable : in hashMap; Key : in nodeKey; hashedKey : in Integer) return Boolean;
 
 
    -- Get the value associated to a key with the exception Cle_Absente_Exception.
-   function ValueOf (HashTable : in hashMap; Key : in Unbounded_String) return Integer;
+   function ValueOf (HashTable : in hashMap; Key : in nodeKey; hashedKey : in Integer) return nodeValue;
 
-
-   -- Display a node.
-   procedure Display (Key : in Unbounded_String; Value : in Integer);
-
-
-   -- Display the hash map.
-   procedure DisplayHashTable (HashTable : in hashMap);
 
    -- Apply a treatment to all of the hash table.
    generic
-		with procedure Treat (Cle : in Unbounded_String; Valeur: in Integer);
+		with procedure Treat (Key : in nodeKey; Valeur: in nodeValue);
 	procedure ForAll (HashTable : in hashMap);
+
+
+   generic
+		with procedure DisplayKey (Key : in nodeKey);
+		with procedure DisplayValue (Value : in nodeValue);
+	procedure DisplayHashTable (HashTable : in hashMap);
 
 
 private
 
-   type bullshitToMakeItWork is record
-      key : nodeKey;
-      value : nodeValue;
-   end record;
-
    type entryNodePointer is access entryNode;
 
-   type nodeArray is array(0..lengthArray) of entryNodePointer;
+   type nodeArray is array (0..lengthArray) of entryNodePointer;
 
    type entryNode is record
-      key : Unbounded_String;
-      value : Integer;
+      key : nodeKey;
+      value : nodeValue;
       -- Only used if two or more nodes have the same hashed key.
       next : entryNodePointer;
    end record;

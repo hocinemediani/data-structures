@@ -1,5 +1,4 @@
 with Ada.Text_IO;          use Ada.Text_IO;
-with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 with Ada.Integer_Text_IO;  use Ada.Integer_Text_IO;
 with Ada.Command_Line;     use Ada.Command_Line;
 with Alea;
@@ -8,10 +7,12 @@ with TH;
 -- Évaluer la qualité du générateur aléatoire et les TH.
 procedure Evaluer_Alea_TH is
 
-	hashTableSize : CONSTANT Integer := 100001;
+	hashTableSize : CONSTANT Integer := 1001;
 
 	package TH_Alea is
-		new TH (nodeKey => Integer, nodeValue => Integer, lengthArray => hashTableSize);
+		new TH (nodeKey => Integer,
+            nodeValue => Integer,
+            lengthArray => hashTableSize);
 	use TH_Alea;
 
 	-- Afficher l'usage.
@@ -81,16 +82,18 @@ procedure Evaluer_Alea_TH is
 	TH : hashMap;
 
 
-	function "+" (Item : in Integer) return Unbounded_String
-		renames To_Unbounded_String;
-
-
 	function MaxValue(value1, value2 : in Integer) return Integer
 		renames Integer'Max;
 
 
 	function MinValue(value1, value2 : in Integer) return Integer
 		renames Integer'Min;
+
+
+   function HashKey (Key : in Integer) return Integer is
+   begin
+      return Key;
+   end HashKey;
 
 
 	begin
@@ -103,21 +106,20 @@ procedure Evaluer_Alea_TH is
 		InitialiseHashTable (TH, hashTableSize);
 		for i in 1 .. Taille loop
 			Get_Random_Number (randInt);
-			if IsIn (TH, +randInt) then
-				Register (TH, +randInt, (randInt + 1));
+			if IsIn (TH, randInt, HashKey (randInt)) then
+				Register (TH, randInt, HashKey (randInt), (randInt));
 			else
-				Register (TH, +randInt, randInt);
+				Register (TH, randInt, HashKey (randInt), randInt - 1);
 			end if;
 		end loop;
 		Min := Taille;
 		Max := 0;
 		for i in 1 .. Borne loop
-			if IsIn (TH, +i) then
-				Max := MaxValue (Max, ValueOf (TH, +i));
-				Min := MinValue (Min, ValueOf (TH, +i));
+			if IsIn (TH, i, HashKey (randInt)) then
+				Max := MaxValue (Max, ValueOf (TH, i, HashKey (randInt)));
+				Min := MinValue (Min, ValueOf (TH, i, HashKey (randInt)));
 			end if;
-		end loop; 
-		DisplayHashTable (TH);
+		end loop;
 		DestroyHashTable (TH);
 	end Calculer_Statistiques;
 
