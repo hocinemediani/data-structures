@@ -55,9 +55,10 @@ package body TH is
    end GetSize;
 
 
-   procedure Register (HashTable : in out hashMap; Key : in nodeKey; hashedKey : in Integer; Value : in nodeValue) is
+   procedure Register (HashTable : in out hashMap; Key : in Unbounded_String; Value : in Integer) is
 
    current, previous, firstNode : entryNodePointer;
+   hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
 
    begin
       current := HashTable.entryNodeArray (hashedKey);
@@ -84,9 +85,10 @@ package body TH is
    end Register;
 
 
-   procedure Delete (HashTable : in out hashMap; Key : in nodeKey; hashedKey : in Integer) is
+   procedure Delete (HashTable : in out hashMap; Key : in Unbounded_String) is
 
    previous, current : entryNodePointer;
+   hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
 
    begin
       current := HashTable.entryNodeArray (hashedKey);
@@ -112,9 +114,10 @@ package body TH is
    end Delete;
 
 
-   function IsIn (HashTable : in hashMap; Key : in nodeKey; hashedKey : in Integer) return Boolean is
+   function IsIn (HashTable : in hashMap; Key : in Unbounded_String) return Boolean is
     
    current : entryNodePointer;
+   hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
     
    begin
       current := HashTable.EntryNodeArray (hashedKey);
@@ -128,9 +131,10 @@ package body TH is
    end IsIn;
 
 
-   function ValueOf (HashTable : in hashMap; Key : in nodeKey; hashedKey : in Integer) return nodeValue is
+   function ValueOf (HashTable : in hashMap; Key : in Unbounded_String) return Integer is
 
    current : entryNodePointer;
+   hashedKey : CONSTANT Integer := To_String (Key)'Length mod HashTable.length;
 
    begin
       current := HashTable.entryNodeArray (hashedKey);
@@ -144,6 +148,12 @@ package body TH is
    end ValueOf;
 
 
+   procedure Display (Key : in Unbounded_String; Value : in Integer) is
+   begin
+      Put("-->["); Put ('"'); Put (To_String (Key)); Put ('"'); Put (" : "); Put (Value, 1); Put("]");
+   end Display;
+
+
    procedure DisplayHashTable (HashTable : in hashMap) is
 
    current : entryNodePointer;
@@ -153,15 +163,9 @@ package body TH is
          current := HashTable.entryNodeArray (i);
          Put (i, 1); Put (" : ");
          if current /= null then
-            Put("-->[");
-            DisplayKey (HashTable.entryNodeArray (i).key);
-            DisplayValue (HashTable.entryNodeArray (i).value);
-            Put("]");
+            Display (HashTable.entryNodeArray (i).key, HashTable.entryNodeArray (i).value);
             while current.next /= null loop
-               Put("-->[");
-               DisplayKey (current.next.key);
-               DisplayValue (current.next.value);
-               Put("]");
+               Display (current.next.key, current.next.value);
                current := current.next;
             end loop;
          end if;

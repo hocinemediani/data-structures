@@ -1,7 +1,6 @@
 -- Définition de structures de données associatives sous forme d'une liste
 -- chaînée associative (LCA).
 generic
-
 	type T_Cle is private;
 	type T_Valeur is private;
 

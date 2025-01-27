@@ -98,7 +98,7 @@ procedure Evaluer_Alea_LCA is
 		for i in 0 .. (Taille - 1) loop
 			Get_Random_Number (randInt);
 			if Cle_Presente (LCA, randInt) then
-				Enregistrer (LCA, randInt, randInt + 1);
+				Enregistrer (LCA, randInt, (randInt + 1));
 			else
 				Enregistrer (LCA, randInt, randInt);
 			end if;

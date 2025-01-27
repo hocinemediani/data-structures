@@ -48,7 +48,7 @@ alloué pour le tableau de pointeurs qu'elle utilise. C'est donc, dans 100% des 
 
 Indiquer les conclusions quant à la qualité du générateur aléatoire.
 
-Le générateur étant aléatoire, on ne peut pas réellement interpréter les résultats donnés pour chaque programmes et comparer leur efficacité de manière réelle. Cependant, on constate tout de même que dans la majeure partie des cas, le générateur à tendance à montrer que les TH sont beaucoup plus efficaces que les LCA.
+...
 
 
 
@@ -57,8 +57,14 @@ Le générateur étant aléatoire, on ne peut pas réellement interpréter les r
 Indiquer ici les principales difficultés rencontrées lors de la réalisation de
 ce projet et comment elles ont été surmontées ou contournéeS.
 
-Surtout de l'ordre du debug. Implémenter les fonctions et comprendre ce qu'elle font et comment elles le font n'est pas si compliqué, mais ensuite comprendre pourquoi on enregistre une entrée deux fois, ou pourquoi la fonction supprimer ne supprime que la clef est la chose la plus compliquée. Ainsi, la majeure partie du temps à été passée à essayer de debug un programme pour ne pas réussir, puis sortir une feuille et un crayon et dessigner un exemple pour vraiment comprendre les cas partculiers à traiter nécessaires au bon fonctionnement du programme.
-Aussi, j'ai décidé d'implémenter la table de hashage sans avoir recours au module LCA, ce qui m'as pris beaucoup plus de temps. J'ai notamment perdu énormément de temps sur les types privés créés, qui, si ils sont finalement des types de base de Ada, n'ont pas forcément besoin d'être implémentés à part pour des soucis de reach pas réellement pertinents dans notre cas...
+Surtout de l'ordre du debug. Implémenter les fonctions et comprendre ce qu'elle font et comment elles le font n'est
+pas si compliqué, mais ensuite comprendr pourquoi on enregistre une entrée deux fois, ou pourquoi la fonction supprimer
+ne supprime que la clef est la chose la plus compliquée. Ainsi, la majeure partie du temps à été passée à essayer de
+debug un programme polur ne pas réussir, puis sortir une feuille et un crayon et dessigner un exemple pour vraiment
+comprendre les cas partculiers à traiter nécessaires au bon fonctionnement du programme.
+Aussi, j'ai décidé d'implémenter la table de hashage sans avoir recours au module LCA, ce qui m'as pris beaucoup plus
+de temps. J'ai notamment perdu énormément de temps sur les types privés créés, qui, si ils sont finalement des types de
+base de Ada, n'ont pas forcément besoin d'être implémentés...
 
 
 
